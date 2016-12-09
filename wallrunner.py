@@ -3,11 +3,11 @@ import arcade
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 600
 
-class SpaceGameWindow(arcade.Window):
+class WallRunnerGameWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcade.set_background_color(arcade.color.CYAN)
 
 
     def on_draw(self):
@@ -15,5 +15,5 @@ class SpaceGameWindow(arcade.Window):
 
 
 if __name__ == '__main__':
-    window = SpaceGameWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
+    window = WallRunnerGameWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
     arcade.run()
