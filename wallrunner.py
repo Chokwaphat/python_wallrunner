@@ -28,29 +28,26 @@ class WallRunnerGameWindow(arcade.Window):
 
         self.man_sprite = ModelSprite('images/man.png',
                                       model=self.world.man)
-        self.rock_sprite = ModelSprite('images/rock.png',
-                                      model=self.world.rock)
+        # self.rock_sprite = ModelSprite('images/rock.png',
+        #                               model=self.world.rock)
+        self.rock_sprites = []
+        for rock in self.world.rocks:
+            self.rock_sprites.append(ModelSprite(
+                'images/rock.png', model=rock))
 
     def animate(self, delta):
         self.world.animate(delta)
 
-    def draw_rocks(self, coins):
-        # for c in rocks:
-        # if not c.is_collected:
-            arcade.draw_texture_rectangle(c.x, c.y, c.width, c.height,
-            self.rock_texture)
-
     def on_draw(self):
-        arcade.set_viewport(self.world.man.x - SCREEN_WIDTH // 2,
-                            self.world.man.x + SCREEN_WIDTH // 2,
-                            self.world.man.y - 100,self.world.man.y + SCREEN_HEIGHT // 2,
-                            )
         arcade.start_render()
 
         self.man_sprite.draw()
 
+        for sprite in self.rock_sprites:
+            sprite.draw()
+
         gl.glDisable(gl.GL_TEXTURE_2D)
-        self.rock_sprite.draw()
+
 
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
