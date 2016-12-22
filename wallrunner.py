@@ -5,6 +5,9 @@ import pyglet.gl as gl
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
+GAME_RUNNING = 0
+GAME_OVER = 1
+
 class ModelSprite(arcade.Sprite):
     def __init__(self, *args, **kwargs):
         self.model = kwargs.pop('model', None)
@@ -23,13 +26,15 @@ class WallRunnerGameWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
 
-        arcade.set_background_color(arcade.color.BISQUE)
+        arcade.set_background_color(arcade.color.AMAZON)
+
+        self.current_state = GAME_RUNNING
+
         self.world = World(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        self.man_sprite = ModelSprite('images/man.png',
-                                      model=self.world.man)
-        # self.rock_sprite = ModelSprite('images/rock.png',
-        #                               model=self.world.rock)
+        self.man_sprite = ModelSprite('images/man.png',model=self.world.man)
+        self.rip_sprite = ModelSprite('images/rip.png',model=self.world.man)
+
         self.rock_sprites = []
         for rock in self.world.rocks:
             self.rock_sprites.append(ModelSprite(
@@ -37,18 +42,25 @@ class WallRunnerGameWindow(arcade.Window):
 
     def animate(self, delta):
         self.world.animate(delta)
+        if(self.world.hp <= 0):
+            self.current_state = GAME_OVER
 
+    def game_over_screen(self):
+            arcade.draw_text("YOU DEAD!", self.width / 2 - 105, self.height / 2 + 100, arcade.color.BLACK, 30)
+            arcade.draw_text("SURVIVE TIME : " + str(int(self.world.time)), self.width / 2 - 170, self.height / 2, arcade.color.BLACK, 30)
     def on_draw(self):
         arcade.start_render()
+        if(self.current_state == GAME_RUNNING):
+            self.man_sprite.draw()
 
-        self.man_sprite.draw()
+            for sprite in self.rock_sprites:
+                sprite.draw()
 
-        for sprite in self.rock_sprites:
-            sprite.draw()
+            arcade.draw_text("SURVIVE TIME : " + str(int(self.world.time)),self.width - 260, self.height - 40,arcade.color.BURNT_SIENNA, 20)
+            arcade.draw_text("HP : " + str(self.world.hp),self.width - 570, self.height - 40,arcade.color.BURNT_SIENNA, 20)
 
-        arcade.draw_text("SURVIVE TIME : " + str(self.world.time),self.width - 259, self.height - 40,arcade.color.BRICK_RED, 20)
-
-        gl.glDisable(gl.GL_TEXTURE_2D)
+        else:
+            self.game_over_screen()
 
 
     def on_key_press(self, key, key_modifiers):

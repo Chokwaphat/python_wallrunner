@@ -19,8 +19,8 @@ class Model:
         self.angle = 0
 
     def hit(self, other, hit_size):
-		return (abs(self.x - other.x) <= hit_size) and (abs(self.y - other.y) <= hit_size)
-    
+        return (abs(self.x - other.x) <= hit_size) and (abs(self.y - other.y) <= hit_size)
+
 class Man(Model):
     def __init__(self, world, x, y):
         super().__init__(world, x, y, 0)
@@ -75,6 +75,10 @@ class Man(Model):
         if self.is_right:
             self.x += self.vx
 
+        if(self.world.hp <= 0):
+            self.vx = 0
+            self.vy = 0
+
         self.wrap()
 
 class World:
@@ -85,12 +89,13 @@ class World:
         self.rocks = []
         for i in range(NUM_ROCK):
 
-            x = random.randrange(500)
+            x = random.randrange(600)
             y = 400 + random.randrange(200)
             self.rock = Rock(x,y)
             self.rocks.append(self.rock)
 
         self.time = 0
+        self.hp = 100
 
     def animate(self, delta):
         self.man.animate(delta)
@@ -100,7 +105,21 @@ class World:
         self.man.wrap()
         self.rock.wrap()
 
-        self.time += delta
+        if(self.hp <= 0):
+            return self.time
+        else:
+            self.time += delta
+
+        for rock in self.rocks:
+            rock.animate(delta)
+            if self.man.hit(rock, 70):
+                self.hp -= 1
+
+
+			# if self.man.hit(rock, 70):
+			# 	self.time -= 3
+            #     rock.random_direction()
+
 
 
     def on_key_press(self, key, key_modifiers):
@@ -119,7 +138,7 @@ class Rock:
         self.y = y
         self.angle = random.randrange(360)
 
-    def animate(self, delta_time):
+    def animate(self, delta):
         self.random_direction()
         self.move_forward()
         self.wrap()
