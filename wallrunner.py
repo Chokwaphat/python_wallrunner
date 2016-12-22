@@ -2,7 +2,7 @@ import arcade
 from models import World
 import pyglet.gl as gl
 
-SCREEN_WIDTH = 500
+SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
 class ModelSprite(arcade.Sprite):
@@ -23,7 +23,7 @@ class WallRunnerGameWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
 
-        arcade.set_background_color(arcade.color.GREEN)
+        arcade.set_background_color(arcade.color.BISQUE)
         self.world = World(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         self.man_sprite = ModelSprite('images/man.png',
@@ -45,6 +45,8 @@ class WallRunnerGameWindow(arcade.Window):
 
         for sprite in self.rock_sprites:
             sprite.draw()
+
+        arcade.draw_text("SURVIVE TIME : " + str(self.world.time),self.width - 259, self.height - 40,arcade.color.BRICK_RED, 20)
 
         gl.glDisable(gl.GL_TEXTURE_2D)
 

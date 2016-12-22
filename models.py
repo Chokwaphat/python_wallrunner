@@ -8,7 +8,7 @@ DOWN_VY = -2
 LEFT_VX = -2
 RIGHT_VX = 2
 NUM_ROCK = 7
-SCREEN_WIDTH = 500
+SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
 class Model:
@@ -18,6 +18,9 @@ class Model:
         self.y = y
         self.angle = 0
 
+    def hit(self, other, hit_size):
+		return (abs(self.x - other.x) <= hit_size) and (abs(self.y - other.y) <= hit_size)
+    
 class Man(Model):
     def __init__(self, world, x, y):
         super().__init__(world, x, y, 0)
@@ -87,12 +90,17 @@ class World:
             self.rock = Rock(x,y)
             self.rocks.append(self.rock)
 
+        self.time = 0
+
     def animate(self, delta):
         self.man.animate(delta)
         for rock in self.rocks:
             rock.animate(delta)
+
         self.man.wrap()
         self.rock.wrap()
+
+        self.time += delta
 
 
     def on_key_press(self, key, key_modifiers):
