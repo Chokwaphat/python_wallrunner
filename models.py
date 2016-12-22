@@ -86,6 +86,8 @@ class World:
         self.width = width
         self.height = height
         self.man = Man(self, 200, 50)
+        self.heart = Heart(self, 300, 200)
+
         self.rocks = []
         for i in range(NUM_ROCK):
 
@@ -131,6 +133,11 @@ class World:
             self.man.left()
         if key == arcade.key.RIGHT:
             self.man.right()
+class Heart:
+    def __init__(self, world, x, y):
+        self.world = world
+        self.x = x
+        self.y = y
 
 class Rock:
     def __init__(self, x, y):

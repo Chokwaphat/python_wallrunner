@@ -34,6 +34,7 @@ class WallRunnerGameWindow(arcade.Window):
 
         self.man_sprite = ModelSprite('images/man.png',model=self.world.man)
         self.rip_sprite = ModelSprite('images/rip.png',model=self.world.man)
+        self.heart_sprite = ModelSprite('images/heart.png',model=self.world.heart)
 
         self.rock_sprites = []
         for rock in self.world.rocks:
@@ -46,15 +47,18 @@ class WallRunnerGameWindow(arcade.Window):
             self.current_state = GAME_OVER
 
     def game_over_screen(self):
+            self.rip_sprite.draw()
             arcade.draw_text("YOU DEAD!", self.width / 2 - 105, self.height / 2 + 100, arcade.color.BLACK, 30)
             arcade.draw_text("SURVIVE TIME : " + str(int(self.world.time)), self.width / 2 - 170, self.height / 2, arcade.color.BLACK, 30)
+
     def on_draw(self):
         arcade.start_render()
         if(self.current_state == GAME_RUNNING):
-            self.man_sprite.draw()
-
+            self.heart_sprite.draw()
             for sprite in self.rock_sprites:
                 sprite.draw()
+            self.man_sprite.draw()
+            
 
             arcade.draw_text("SURVIVE TIME : " + str(int(self.world.time)),self.width - 260, self.height - 40,arcade.color.BURNT_SIENNA, 20)
             arcade.draw_text("HP : " + str(self.world.hp),self.width - 570, self.height - 40,arcade.color.BURNT_SIENNA, 20)
