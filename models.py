@@ -7,7 +7,7 @@ UP_VY = 2
 DOWN_VY = -2
 LEFT_VX = -2
 RIGHT_VX = 2
-NUM_ROCK = 7
+NUM_ROCK = 12
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
@@ -86,7 +86,7 @@ class World:
         self.width = width
         self.height = height
         self.man = Man(self, 200, 50)
-        self.heart = Heart(self, 300, 200)
+        self.heart = Heart(self, 500, 500)
 
         self.rocks = []
         for i in range(NUM_ROCK):
@@ -107,6 +107,10 @@ class World:
         self.man.wrap()
         self.rock.wrap()
 
+        if(self.man.hit(self.heart, 30)):
+            self.heart.random_location()
+            self.hp += 10
+
         if(self.hp <= 0):
             return self.time
         else:
@@ -114,7 +118,7 @@ class World:
 
         for rock in self.rocks:
             rock.animate(delta)
-            if self.man.hit(rock, 70):
+            if self.man.hit(rock, 50):
                 self.hp -= 1
 
 
@@ -133,11 +137,15 @@ class World:
             self.man.left()
         if key == arcade.key.RIGHT:
             self.man.right()
-class Heart:
+class Heart(Model):
     def __init__(self, world, x, y):
         self.world = world
         self.x = x
         self.y = y
+
+    def random_location(self):
+        self.x = randint(0, self.world.width - 30)
+        self.y = randint(0, self.world.height - 30)
 
 class Rock:
     def __init__(self, x, y):
